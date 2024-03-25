@@ -65,8 +65,10 @@ fun ComposableLanguage() {
 
     val language: Language = if (languageName == "English") {
         English()
-    } else {
+    } else if (languageName == "Khmer"){
         Khmer()
+    } else {
+        Chinese()
     }
 
     Box(
@@ -79,6 +81,9 @@ fun ComposableLanguage() {
                 }
                 Button(onClick = { languageName = "Khmer" }) {
                     Text(text = "ខ្មែរ")
+                }
+                Button(onClick = { languageName = "Chinese" }) {
+                    Text(text = "中文")
                 }
             }
             Row {
@@ -124,6 +129,16 @@ class Khmer() : Language {
     override fun service(): String = "សេវាកម្ម"
 
     override fun buy(): String = "ទិញ"
+}
+
+class Chinese() : Language {
+    override fun home(): String = "主页"
+
+    override fun product(): String = "产品"
+
+    override fun service(): String = "服务"
+
+    override fun buy(): String = "买"
 }
 
 @Composable
