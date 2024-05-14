@@ -33,6 +33,7 @@ import androidx.navigation.navArgument
 import com.example.myapplication.models.movieList1
 import com.example.myapplication.screens.DetailScreen
 import com.example.myapplication.screens.MainScreen
+import com.example.myapplication.state_movie_module.StateMovieApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +45,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color(0xFFE6E2E1)
                 ) {
-                    ComposableLanguage();
+//                    ComposableLanguage();
+                    StateMovieApp();
                 }
             }
         }
