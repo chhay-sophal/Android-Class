@@ -1,5 +1,6 @@
 package com.example.myapplication.state_movie_module.viewmodels
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -8,9 +9,11 @@ import com.example.myapplication.state_movie_module.models.stateMovieList1
 
 class StateMovieViewModel: ViewModel() {
 //    var movieList: MutableList<MovieModel> = movieList1.toMutableList()
-val movieList: MutableState<List<StateMovieModel>> = mutableStateOf(stateMovieList1)
+    val movieList: MutableState<List<StateMovieModel>> = mutableStateOf(stateMovieList1)
     val selectedMovie: MutableState<StateMovieModel> = mutableStateOf(StateMovieModel())
     var sortedAZ: MutableState<Boolean> = mutableStateOf(false)
+    @SuppressLint("MutableCollectionMutableState")
+    val favoriteMovieList : MutableState<MutableList<StateMovieModel>> = mutableStateOf(mutableListOf())
 
     fun sortMoviesByTitle() {
         sortedAZ.value = !sortedAZ.value
@@ -27,5 +30,13 @@ val movieList: MutableState<List<StateMovieModel>> = mutableStateOf(stateMovieLi
             newMutableList.removeAt(index)
             movieList.value = newMutableList
         }
+    }
+
+    fun addToFavorite(movie: StateMovieModel){
+        favoriteMovieList.value.add(movie);
+    }
+
+    fun removeFromFavorite(movie: StateMovieModel){
+        favoriteMovieList.value.remove(movie);
     }
 }
