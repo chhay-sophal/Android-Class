@@ -8,12 +8,10 @@ import com.example.myapplication.state_movie_module.models.StateMovieModel
 import com.example.myapplication.state_movie_module.models.stateMovieList1
 
 class StateMovieViewModel: ViewModel() {
-//    var movieList: MutableList<MovieModel> = movieList1.toMutableList()
+    //    var movieList: MutableList<MovieModel> = movieList1.toMutableList()
     val movieList: MutableState<List<StateMovieModel>> = mutableStateOf(stateMovieList1)
     val selectedMovie: MutableState<StateMovieModel> = mutableStateOf(StateMovieModel())
     var sortedAZ: MutableState<Boolean> = mutableStateOf(false)
-    @SuppressLint("MutableCollectionMutableState")
-    val favoriteMovieList : MutableState<MutableList<StateMovieModel>> = mutableStateOf(mutableListOf())
 
     fun sortMoviesByTitle() {
         sortedAZ.value = !sortedAZ.value
@@ -32,11 +30,25 @@ class StateMovieViewModel: ViewModel() {
         }
     }
 
-    fun addToFavorite(movie: StateMovieModel){
-        favoriteMovieList.value.add(movie);
+    @SuppressLint("MutableCollectionMutableState")
+    val cartItems: MutableState<MutableList<StateMovieModel>> = mutableStateOf(mutableListOf())
+    //    var cartItems: MutableState<Int> = mutableIntStateOf(0)
+
+    fun addToCart(movie: StateMovieModel) {
+        cartItems.value.add(movie)
     }
 
-    fun removeFromFavorite(movie: StateMovieModel){
-        favoriteMovieList.value.remove(movie);
+    fun removeFromCart(movie: StateMovieModel) {
+        cartItems.value.remove(movie)
+    }
+
+    fun isInCart(movie: StateMovieModel) = cartItems.value.contains(movie)
+
+    fun toggleItemToCart(movie: StateMovieModel) {
+        if (isInCart(movie)) {
+            removeFromCart(movie)
+        } else {
+            addToCart(movie)
+        }
     }
 }

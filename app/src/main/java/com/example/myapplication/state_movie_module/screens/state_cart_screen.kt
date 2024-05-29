@@ -12,19 +12,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.ShoppingCart
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,10 +34,10 @@ import coil.compose.AsyncImage
 import com.example.myapplication.state_movie_module.viewmodels.StateMovieViewModel
 
 @Composable
-fun StateMovieScreen(navController: NavController, movieVM: StateMovieViewModel = viewModel()) {
+fun StateCartScreen(navController: NavController, movieVM: StateMovieViewModel = viewModel()) {
     Scaffold(
         topBar = {
-            ComposeTopBar(navController, movieVM)
+            ComposeCartTopBar(navController, movieVM)
         }
     ) {
         Box(
@@ -48,35 +46,23 @@ fun StateMovieScreen(navController: NavController, movieVM: StateMovieViewModel 
                 .fillMaxSize()
         ) {
             Column {
-//                Row {
-//                    Spacer(modifier = Modifier.weight(1f))
-//                    Button(onClick = {
-//                        movieVM.sortMoviesByTitle()
-//                    }) {
-//                        if (!movieVM.sortedAZ.value) {
-//                            Text(text = "Sort By Title Ascending")
-//                        } else {
-//                            Text(text = "Sort By Title Descending")
-//                        }
-//                    }
-//                }
                 LazyColumn() {
-                    items(movieVM.movieList.value.size) { index ->
-//                        val movie = movieVM.movieList.value[index]
+                    items(movieVM.cartItems.value.size) { index ->
+                        val movie = movieVM.cartItems.value[index]
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Absolute.SpaceBetween
                         ) {
                             Text(
-                                movieVM.movieList.value[index].name,
+                                movie.name,
                                 modifier = Modifier.padding(10.dp)
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             IconButton(onClick = {
-                                movieVM.toggleItemToCart(movieVM.movieList.value[index])
+                                movieVM.toggleItemToCart(movie)
                             }) {
                                 Icon(
-                                    imageVector = if (movieVM.isInCart(movieVM.movieList.value[index])) Icons.Filled.ShoppingCart else Icons.Outlined.ShoppingCart,
+                                    imageVector = if (movieVM.isInCart(movie)) Icons.Filled.ShoppingCart else Icons.Outlined.ShoppingCart,
                                     contentDescription = "Toggle Cart"
                                 )
                             }
@@ -92,10 +78,10 @@ fun StateMovieScreen(navController: NavController, movieVM: StateMovieViewModel 
                                 .size(width = 500.dp, height = 300.dp)
                                 .fillParentMaxWidth()
                                 .clickable {
-                                    movieVM.selectedMovie.value = movieVM.movieList.value[index]
+                                    movieVM.selectedMovie.value = movie
                                     navController.navigate("detail")
                                 },
-                            model = movieVM.movieList.value[index].image,
+                            model = movie.image,
                             contentDescription = null,
                             contentScale = ContentScale.Crop
                         )
@@ -108,30 +94,22 @@ fun StateMovieScreen(navController: NavController, movieVM: StateMovieViewModel 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ComposeTopBar(nc: NavController, movieVM: StateMovieViewModel = viewModel()) {
+fun ComposeCartTopBar(nc: NavController, movieVM: StateMovieViewModel = viewModel()) {
     TopAppBar(
-        title = { Text(text = "X-MOVIES") },
-        colors = topAppBarColors(
+        title = { Text(text = "Cart") },
+        navigationIcon = {
+            IconButton(onClick = { nc.navigateUp() }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Back"
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Red,
             titleContentColor = Color.White,
             navigationIconContentColor = Color.White,
             actionIconContentColor = Color.White
-        ),
-        actions = {
-            BadgedBox(
-                badge = {
-                    Badge {
-                        Text(text = movieVM.cartItems.value.size.toString())
-                    }
-                }
-            ) {
-                IconButton(onClick = { nc.navigate("cart") }, modifier = Modifier.size(26.dp)) {
-                    Icon(imageVector = Icons.Filled.ShoppingCart, contentDescription = null, modifier = Modifier.size(20.dp))
-                }
-            }
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.List, contentDescription = null)
-            }
-        }
+        )
     )
 }
