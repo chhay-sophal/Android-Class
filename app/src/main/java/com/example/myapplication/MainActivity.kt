@@ -46,7 +46,8 @@ class MainActivity : ComponentActivity() {
                     color = Color(0xFFE6E2E1)
                 ) {
 //                    ComposableLanguage();
-                    StateMovieApp();
+//                    StateMovieApp();
+                    LoopWithoutCoroutine()
                 }
             }
         }
