@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import RandomUserViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,15 +26,20 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.myapplication.models.movieList1
+import com.example.myapplication.rnduser.RandomUserView
 import com.example.myapplication.screens.DetailScreen
 import com.example.myapplication.screens.MainScreen
 import com.example.myapplication.state_movie_module.StateMovieApp
+import com.example.myapplication.state_movie_module.viewmodels.StateMovieViewModel
+import com.example.myapplication.themoviedb_module.TheMovieScreen
+import com.example.myapplication.themoviedb_module.TheMovieViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,9 +51,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color(0xFFE6E2E1)
                 ) {
-//                    ComposableLanguage();
-//                    StateMovieApp();
-                    LoopWithoutCoroutine()
+                    val vm = TheMovieViewModel()
+                    TheMovieScreen(vm)
                 }
             }
         }
