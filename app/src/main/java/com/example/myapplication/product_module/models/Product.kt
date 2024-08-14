@@ -13,3 +13,7 @@ data class Product (
     @SerializedName("category") var category : String
 
 )
+
+data class ProductResponse (
+    @SerializedName("products") val products: List<Product>
+)

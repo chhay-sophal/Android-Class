@@ -29,9 +29,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.myapplication.models.movieList1
+import com.example.myapplication.product_module.ProductApp
 import com.example.myapplication.screens.DetailScreen
 import com.example.myapplication.screens.MainScreen
-import com.example.myapplication.themoviedb_module.StateTheMovie
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,7 +44,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color(0xFFE6E2E1)
                 ) {
-                    StateTheMovie()
+//                    StateTheMovie()
+                    ProductApp()
                 }
             }
         }
