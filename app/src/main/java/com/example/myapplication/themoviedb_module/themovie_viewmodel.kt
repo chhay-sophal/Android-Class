@@ -15,7 +15,6 @@ class TheMovieViewModel: ViewModel() {
     var errorMessage: String by mutableStateOf("")
     var isLoading: Boolean by mutableStateOf(false)
     private val apiService = TheMovieService.getInstance()
-    var movieDetail: Result? by mutableStateOf(null)
 
     private var currentPage = 1
     private var isLastPage = false
@@ -33,19 +32,6 @@ class TheMovieViewModel: ViewModel() {
                 } else {
                     isLastPage = true
                 }
-            } catch (e: Exception) {
-                errorMessage = e.message.toString()
-            } finally {
-                isLoading = false
-            }
-        }
-    }
-
-    fun getMovieDetail(movieId: Long) {
-        viewModelScope.launch {
-            isLoading = true
-            try {
-                movieDetail = apiService.getMovieDetail(movieId)
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
             } finally {
