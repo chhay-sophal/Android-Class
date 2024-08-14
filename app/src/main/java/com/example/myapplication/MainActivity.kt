@@ -1,6 +1,5 @@
 package com.example.myapplication
 
-import RandomUserViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,27 +18,22 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.myapplication.models.movieList1
-import com.example.myapplication.rnduser.RandomUserView
 import com.example.myapplication.screens.DetailScreen
 import com.example.myapplication.screens.MainScreen
-import com.example.myapplication.state_movie_module.StateMovieApp
-import com.example.myapplication.state_movie_module.viewmodels.StateMovieViewModel
 import com.example.myapplication.themoviedb_module.TheMovieScreen
 import com.example.myapplication.themoviedb_module.TheMovieViewModel
+import com.example.myapplication.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
