@@ -70,7 +70,9 @@ fun TheMovieScreen(
     var expanded by remember { mutableStateOf(false) }
     var sortOption by remember { mutableStateOf("popularity.desc") }
 
-    LaunchedEffect(Unit) { vm.getMovies(sortBy = sortOption) }
+    LaunchedEffect(sortOption) {
+        vm.getMovies(sortBy = sortOption)
+    }
 
     TheMovieTheme(darkTheme = isDarkMode) {
         Scaffold(

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class TheMovieViewModel: ViewModel() {
+class TheMovieViewModel : ViewModel() {
     private val _movies = mutableStateListOf<Result>()
     val movies: List<Result>
         get() = _movies
@@ -18,8 +18,9 @@ class TheMovieViewModel: ViewModel() {
 
     private var currentPage = 1
     private var isLastPage = false
+    private var currentSortBy = "popularity.desc"
 
-    fun getMovies(sortBy: String = "popularity.desc", page: Int = 1) {
+    fun getMovies(sortBy: String = currentSortBy, page: Int = 1) {
         viewModelScope.launch {
             if (isLastPage) return@launch
 
@@ -27,11 +28,15 @@ class TheMovieViewModel: ViewModel() {
             try {
                 val response = apiService.getMovies(sortBy = sortBy, page = page)
                 if (response.results.isNotEmpty()) {
+                    if (page == 1) {
+                        _movies.clear()  // Clear existing list if new sort option is selected
+                    }
                     _movies.addAll(response.results)
                     currentPage++
                 } else {
                     isLastPage = true
                 }
+                currentSortBy = sortBy
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
             } finally {
@@ -40,7 +45,7 @@ class TheMovieViewModel: ViewModel() {
         }
     }
 
-    fun loadNextPage(sortBy: String = "popularity.desc") {
-        getMovies(sortBy, currentPage)
+    fun loadNextPage() {
+        getMovies(currentSortBy, currentPage)
     }
 }
