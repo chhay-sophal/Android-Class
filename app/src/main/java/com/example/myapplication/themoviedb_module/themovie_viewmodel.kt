@@ -14,14 +14,28 @@ class TheMovieViewModel: ViewModel() {
         get() = _movies
     var errorMessage: String by mutableStateOf("")
     var isLoading: Boolean by mutableStateOf(false)
+    private val apiService = TheMovieService.getInstance()
+    var movieDetail: Result? by mutableStateOf(null)
 
-    fun getMovies() {
+    fun getMovies(sortBy: String = "popularity.desc") {
         viewModelScope.launch {
             isLoading = true
-            val apiService = TheMovieService.getInstance()
             try {
                 _movies.clear()
-                _movies.addAll(apiService.getMovies().results)
+                _movies.addAll(apiService.getMovies(sortBy = sortBy).results)
+            } catch (e: Exception) {
+                errorMessage = e.message.toString()
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun getMovieDetail(movieId: Long) {
+        viewModelScope.launch {
+            isLoading = true
+            try {
+                movieDetail = apiService.getMovieDetail(movieId)
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
             } finally {
