@@ -29,7 +29,7 @@ class TheMovieViewModel : ViewModel() {
                 val response = apiService.getMovies(sortBy = sortBy, page = page)
                 if (response.results.isNotEmpty()) {
                     if (page == 1) {
-                        _movies.clear()  // Clear existing list if new sort option is selected
+                        _movies.clear()
                     }
                     _movies.addAll(response.results)
                     currentPage++

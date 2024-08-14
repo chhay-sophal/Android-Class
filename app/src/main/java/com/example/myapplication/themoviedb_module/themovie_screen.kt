@@ -80,7 +80,6 @@ fun TheMovieScreen(
                 TopAppBar(
                     title = { Text("Movies") },
                     actions = {
-                        // Sort Button
                         IconButton(onClick = { expanded = !expanded }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.sort),
@@ -89,7 +88,6 @@ fun TheMovieScreen(
                             )
                         }
 
-                        // Sort Menu
                         DropdownMenu(
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
@@ -144,7 +142,6 @@ fun TheMovieScreen(
                             )
                         }
 
-                        // Grid/List Button
                         IconButton(onClick = { isGridView = !isGridView }) {
                             Icon(
                                 painter = painterResource(id = if(isGridView) R.drawable.list else R.drawable.grid),
@@ -153,7 +150,6 @@ fun TheMovieScreen(
                             )
                         }
 
-                        // Light/Dark Mode Button
                         IconButton(onClick = { toggleDarkMode() }) {
                             Icon(
                                 painter = painterResource(id = if(isDarkMode) R.drawable.sun else R.drawable.moon), // Use appropriate icon
@@ -162,7 +158,6 @@ fun TheMovieScreen(
                             )
                         }
 
-                        // Search Button
                         IconButton(onClick = { /* Handle search */ }) {
                             Icon(
                                 Icons.Default.Search,
