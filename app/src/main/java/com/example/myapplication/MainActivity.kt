@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showSystemUi = true)
 @Composable
 fun App() {
-    ComposableLanguage();
+    ComposableLanguage()
 }
 
 @Composable
@@ -65,12 +65,16 @@ fun ComposableLanguage() {
         mutableStateOf("English")
     }
 
-    val language: Language = if (languageName == "English") {
-        English()
-    } else if (languageName == "Khmer"){
-        Khmer()
-    } else {
-        Chinese()
+    val language: Language = when (languageName) {
+        "English" -> {
+            English()
+        }
+        "Khmer" -> {
+            Khmer()
+        }
+        else -> {
+            Chinese()
+        }
     }
 
     Box(
@@ -154,7 +158,7 @@ fun ComposeCounterText() {
     }
 
     var fontSize by remember {
-        mutableIntStateOf(10);
+        mutableIntStateOf(10)
     }
 
     Box(
@@ -208,7 +212,7 @@ fun ComposeNavScreen() {
         ) { backStackEntry ->
             val movieName = backStackEntry.arguments?.getString("movieName")
             val selectedMovie = movieList1.first {it.name == movieName}
-            DetailScreen(navController, selectedMovie);
+            DetailScreen(navController, selectedMovie)
         }
     }
 }
