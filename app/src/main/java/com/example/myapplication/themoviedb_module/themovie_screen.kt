@@ -186,7 +186,7 @@ fun TheMovieScreen(
 @Composable
 fun TheMovieBody(vm: TheMovieViewModel, isGridView: Boolean, nv: NavController) {
     when {
-        vm.isLoading -> {
+        vm.isLoading && vm.movies.isEmpty() -> {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -221,8 +221,22 @@ fun TheMovieBody(vm: TheMovieViewModel, isGridView: Boolean, nv: NavController) 
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(vm.movies.size) {
-                        GridMovieItem(item = vm.movies[it], nv)
+                    items(vm.movies.size) { index ->
+                        GridMovieItem(item = vm.movies[index], nv)
+                        if (index == vm.movies.size - 1) {
+                            LaunchedEffect(Unit) {
+                                vm.loadNextPage()
+                            }
+                        }
+                    }
+                    if (vm.isLoading) {
+                        item {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            )
+                        }
                     }
                 }
             } else {
@@ -232,8 +246,22 @@ fun TheMovieBody(vm: TheMovieViewModel, isGridView: Boolean, nv: NavController) 
                         .padding(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(vm.movies.size) {
-                        ListMovieItem(item = vm.movies[it], nv)
+                    items(vm.movies.size) { index ->
+                        ListMovieItem(item = vm.movies[index], nv)
+                        if (index == vm.movies.size - 1) {
+                            LaunchedEffect(Unit) {
+                                vm.loadNextPage()
+                            }
+                        }
+                    }
+                    if (vm.isLoading) {
+                        item {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            )
+                        }
                     }
                 }
             }

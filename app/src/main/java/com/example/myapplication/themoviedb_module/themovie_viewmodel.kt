@@ -17,12 +17,22 @@ class TheMovieViewModel: ViewModel() {
     private val apiService = TheMovieService.getInstance()
     var movieDetail: Result? by mutableStateOf(null)
 
-    fun getMovies(sortBy: String = "popularity.desc") {
+    private var currentPage = 1
+    private var isLastPage = false
+
+    fun getMovies(sortBy: String = "popularity.desc", page: Int = 1) {
         viewModelScope.launch {
+            if (isLastPage) return@launch
+
             isLoading = true
             try {
-                _movies.clear()
-                _movies.addAll(apiService.getMovies(sortBy = sortBy).results)
+                val response = apiService.getMovies(sortBy = sortBy, page = page)
+                if (response.results.isNotEmpty()) {
+                    _movies.addAll(response.results)
+                    currentPage++
+                } else {
+                    isLastPage = true
+                }
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
             } finally {
@@ -42,5 +52,9 @@ class TheMovieViewModel: ViewModel() {
                 isLoading = false
             }
         }
+    }
+
+    fun loadNextPage(sortBy: String = "popularity.desc") {
+        getMovies(sortBy, currentPage)
     }
 }

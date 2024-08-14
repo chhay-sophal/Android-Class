@@ -12,13 +12,6 @@ import retrofit2.http.Query
 val TheMovieDB_BASE_URL = "https://api.themoviedb.org/3/"
 
 interface TheMovieService {
-//    @GET("movie")
-//    suspend fun getMovies(
-//        @Query("sort_by") sortBy: String = "popularity.desc",
-//        @Query("page") page: Int = 1,
-//        @Query("api_key") apiKey: String = "f7dabf39cb7c0323fb4658741c5cb24d",
-//    ): TheMovie
-
     @GET("discover/movie")
     suspend fun getMovies(
         @Query("sort_by") sortBy: String = "popularity.desc",
