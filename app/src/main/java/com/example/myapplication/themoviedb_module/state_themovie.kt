@@ -21,7 +21,11 @@ fun StateTheMovie(){
 
         composable(route = "movie_detail/{movieId}") {backStackEntry ->
             val movieId = backStackEntry.arguments?.getString("movieId")?.toLong() ?: 0L
-            TheMovieDetailScreen(movieId, movieVM, navController)
+            movieVM.getMovieDetail(movieId)
+            val selectedMovie = movieVM.movieDetail
+            if (selectedMovie != null) {
+                TheMovieDetailScreen(selectedMovie, movieVM, navController)
+            }
         }
     }
 }

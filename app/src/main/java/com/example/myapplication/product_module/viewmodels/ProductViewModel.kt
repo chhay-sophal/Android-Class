@@ -17,9 +17,6 @@ class ProductViewModel: ViewModel() {
         get() = _productList
 
     fun getProducts() {
-        viewModelScope.launch {
-            isLoading = true
-            val apiService = 
-        }
+
     }
 }

@@ -18,7 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,15 +32,11 @@ import com.example.myapplication.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TheMovieDetailScreen(movieId: Long, vm: TheMovieViewModel, navController: NavController) {
+fun TheMovieDetailScreen(selectedMovie: Result, vm: TheMovieViewModel, navController: NavController) {
     var isDarkMode by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
 
-    LaunchedEffect(movieId) {
-        vm.getMovieDetail(movieId)
-    }
-
-    val movieDetail by remember { mutableStateOf(vm.movieDetail) }
+//    val movieDetail by remember { mutableStateOf(vm.movieDetail) }
     val isLoading by remember { mutableStateOf(vm.isLoading) }
     val errorMessage by remember { mutableStateOf(vm.errorMessage) }
 
@@ -49,7 +44,7 @@ fun TheMovieDetailScreen(movieId: Long, vm: TheMovieViewModel, navController: Na
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(movieDetail?.title ?: "Movie Detail") },
+                    title = { Text(selectedMovie.title) },
                     navigationIcon = {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
@@ -97,10 +92,11 @@ fun TheMovieDetailScreen(movieId: Long, vm: TheMovieViewModel, navController: Na
                             color = MaterialTheme.colorScheme.error
                         )
                     }
-                    movieDetail != null -> {
+
+                    else -> {
                         Column {
                             AsyncImage(
-                                model = movieDetail!!.posterPath,
+                                model = selectedMovie.posterPath,
                                 contentDescription = "Movie Poster",
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -108,17 +104,17 @@ fun TheMovieDetailScreen(movieId: Long, vm: TheMovieViewModel, navController: Na
                                     .padding(bottom = 16.dp)
                             )
                             Text(
-                                text = movieDetail?.title ?: "",
+                                text = selectedMovie.title,
                                 style = MaterialTheme.typography.headlineMedium,
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
                             Text(
-                                text = "Release Date: ${movieDetail?.releaseDate ?: ""}",
+                                text = "Release Date: ${selectedMovie.releaseDate}",
                                 style = MaterialTheme.typography.bodyLarge,
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
                             Text(
-                                text = "Overview: ${movieDetail?.overview ?: ""}",
+                                text = "Overview: ${selectedMovie.overview}",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
