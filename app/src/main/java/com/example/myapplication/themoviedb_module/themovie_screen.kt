@@ -60,9 +60,13 @@ import com.example.myapplication.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TheMovieScreen(vm: TheMovieViewModel, nv: NavController) {
+fun TheMovieScreen(
+    vm: TheMovieViewModel,
+    nv: NavController,
+    isDarkMode: Boolean,
+    toggleDarkMode: () -> Unit
+) {
     var isGridView by remember { mutableStateOf(false) }
-    var isDarkMode by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var sortOption by remember { mutableStateOf("popularity.desc") }
 
@@ -148,7 +152,7 @@ fun TheMovieScreen(vm: TheMovieViewModel, nv: NavController) {
                         }
 
                         // Light/Dark Mode Button
-                        IconButton(onClick = { isDarkMode = !isDarkMode }) {
+                        IconButton(onClick = { toggleDarkMode() }) {
                             Icon(
                                 painter = painterResource(id = if(isDarkMode) R.drawable.sun else R.drawable.moon), // Use appropriate icon
                                 contentDescription = "Toggle Mode",

@@ -18,10 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -35,9 +31,12 @@ import com.example.myapplication.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TheMovieDetailScreen(selectedMovie: Result, navController: NavController) {
-    var isDarkMode by remember { mutableStateOf(false) }
-
+fun TheMovieDetailScreen(
+    selectedMovie: Result,
+    navController: NavController,
+    isDarkMode: Boolean,
+    toggleDarkMode: () -> Unit
+) {
     TheMovieTheme(darkTheme = isDarkMode) {
         Scaffold(
             topBar = {
@@ -52,7 +51,7 @@ fun TheMovieDetailScreen(selectedMovie: Result, navController: NavController) {
                         }
                     },
                     actions = {
-                        IconButton(onClick = { isDarkMode = !isDarkMode }) {
+                        IconButton(onClick = { toggleDarkMode() }) {
                             Icon(
                                 painter = painterResource(id = if (isDarkMode) R.drawable.sun else R.drawable.moon),
                                 contentDescription = "Toggle Mode",
