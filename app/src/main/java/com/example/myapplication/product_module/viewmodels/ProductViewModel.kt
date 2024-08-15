@@ -1,41 +1,47 @@
 package com.example.myapplication.product_module.viewmodels
 
-import android.util.Log
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.myapplication.product_module.models.Product
-import com.example.myapplication.product_module.models.ProductResponse
 import com.example.myapplication.product_module.services.ProductService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
 
 class ProductViewModel : ViewModel() {
-    private val _products = mutableStateOf<List<Product>>(emptyList())
-    val products: State<List<Product>> = _products
+    private val _products = mutableStateListOf<Product>()
+    val products: List<Product>
+        get() = _products
+    var errorMessage: String by mutableStateOf("")
+    var isLoading: Boolean by mutableStateOf(false)
+    private val apiService = ProductService.getInstance()
 
-    init {
-        fetchProducts()
-    }
+    private var currentPage = 1
+    private var isLastPage = false
 
-    private fun fetchProducts() {
-        val productService = ProductService.getInstance()
-        val apiKey = "d2f8e6d5c9b0a1e2f7d3c4b5a6e7f8g9h0i1j2k3l4m5n6o7p8q9r0s1t2u3v4w5x6y7z"
-        productService.getProducts(apiKey, page = 1, limit = 10).enqueue(object :
-            Callback<ProductResponse> {
-            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
-                if (response.isSuccessful) {
-                    Log.d("ProductViewModel", "Response Success: ${response.body()}")
-                    _products.value = response.body()?.products ?: emptyList()
+    fun fetchProducts(page: Int = 1, limit: Int = 10) {
+        viewModelScope.launch {
+            if (isLastPage) return@launch
+
+            isLoading = true
+            try {
+                val response = apiService.getProducts(page = page, limit = limit)
+                if (response.products.isNotEmpty()) {
+                    if (page == 1) {
+                        _products.clear()
+                    }
+                    _products.addAll(response.products)
+                    currentPage++
                 } else {
-                    Log.e("ProductViewModel", "Response Error: ${response.errorBody()?.string()}")
+                    isLastPage = true
                 }
+            } catch (e: Exception) {
+                errorMessage = e.message.toString()
+            } finally {
+                isLoading = false
             }
-
-            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                Log.e("ProductViewModel", "Request Failed: ${t.message}")
-            }
-        })
+        }
     }
 }

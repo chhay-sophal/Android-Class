@@ -55,6 +55,8 @@ dependencies {
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.7")
+//    implementation("androidx.compose.material:material-icons-extended:15")
+    implementation("androidx.compose.material:material-icons-extended:1.6.8")
 
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
     implementation("androidx.navigation:navigation-compose:2.7.7")

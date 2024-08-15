@@ -6,12 +6,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +23,13 @@ import com.example.myapplication.product_module.viewmodels.ProductViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductScreen(productViewModel: ProductViewModel) {
-    val products by productViewModel.products // Use `by` to observe changes
+    LaunchedEffect(Unit) {
+        productViewModel.fetchProducts()
+    }
+
+    val products = productViewModel.products
+    val isLoading = productViewModel.isLoading
+    val errorMessage = productViewModel.errorMessage
 
     Scaffold(
         topBar = {
@@ -35,8 +42,20 @@ fun ProductScreen(productViewModel: ProductViewModel) {
             modifier = Modifier.padding(it).fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-//            ProductList(products = products) // Pass products directly
-            ProductList(products = products)
+            when {
+                isLoading -> {
+                    CircularProgressIndicator()
+                }
+                errorMessage.isNotEmpty() -> {
+                    Text(text = errorMessage, color = Color.Red)
+                }
+                products.isNotEmpty() -> {
+                    ProductList(products = products)
+                }
+                else -> {
+                    Text(text = "No products available.")
+                }
+            }
         }
     }
 }
@@ -44,8 +63,8 @@ fun ProductScreen(productViewModel: ProductViewModel) {
 @Composable
 fun ProductList(products: List<Product>) {
     LazyColumn {
-        items(products.size) {
-            ProductItem(product = products[it])
+        items(products.size) { index ->
+            ProductItem(product = products[index])
         }
     }
 }
@@ -56,7 +75,7 @@ fun ProductItem(product: Product) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .background(Color.LightGray) // Background color
+            .background(Color.LightGray)
     ) {
         Text(
             text = "${product.title} - ${product.price}",
