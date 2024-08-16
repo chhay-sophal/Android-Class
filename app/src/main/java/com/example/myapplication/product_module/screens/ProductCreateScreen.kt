@@ -27,7 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.myapplication.product_module.models.Product
+import com.example.myapplication.product_module.models.CreateProductRequest
 import com.example.myapplication.product_module.viewmodels.ProductViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,7 +79,7 @@ fun ProductCreateScreen(viewModel: ProductViewModel, onProductCreated: () -> Uni
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            val product = Product(
+            val product = CreateProductRequest(
                 title = title,
                 body = body,
                 qty = qty,

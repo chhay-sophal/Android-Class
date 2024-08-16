@@ -34,12 +34,12 @@ fun ProductDeleteScreen(viewModel: ProductViewModel, product: Product, onProduct
         Spacer(modifier = Modifier.height(16.dp))
 
         Row {
-//            Button(onClick = {
-//                viewModel.deleteProduct(product.pid)
-//                onProductDeleted()
-//            }) {
-//                Text("Delete")
-//            }
+            Button(onClick = {
+                viewModel.deleteProduct(product.pid)
+                onProductDeleted()
+            }) {
+                Text("Delete")
+            }
 
             Spacer(modifier = Modifier.width(16.dp))
 

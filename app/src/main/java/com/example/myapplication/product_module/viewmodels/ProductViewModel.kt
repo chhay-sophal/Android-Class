@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.product_module.models.CreateProductRequest
+import com.example.myapplication.product_module.models.UpdateProductRequest
 import com.example.myapplication.product_module.models.Product
 import com.example.myapplication.product_module.services.ProductService
 import kotlinx.coroutines.launch
@@ -45,23 +47,15 @@ class ProductViewModel : ViewModel() {
         }
     }
 
-    fun createProduct(product: Product) {
+    fun createProduct(product: CreateProductRequest) {
         viewModelScope.launch {
             isLoading = true
             try {
-                val response = apiService.createProduct(
-                    title = product.title,
-                    body = product.body,
-                    qty = product.qty,
-                    price = product.price,
-                    image = product.image,
-                    category = product.category
-                )
-                if (response.success == true) {
-//                    _products.add(response.product)
+                val response = apiService.createProduct(product = product)
+                if (response.message != null) {
                     fetchProducts()
                 } else {
-                    errorMessage = "Error: $response"
+                    errorMessage = "Error: ${response.error}"
                 }
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
@@ -71,63 +65,40 @@ class ProductViewModel : ViewModel() {
         }
     }
 
-//    fun updateProduct(
-//        pid: Int,
-//        title: String? = null,
-//        body: String? = null,
-//        qty: Int? = null,
-//        price: Double? = null,
-//        image: String? = null,
-//        category: String? = null
-//    ) {
-//        viewModelScope.launch {
-//            isLoading = true
-//            try {
-//                val response = apiService.updateProduct(
-//                    apiKey = "d2f8e6d5c9b0a1e2f7d3c4b5a6e7f8g9h0i1j2k3l4m5n6o7p8q9r0s1t2u3v4w5x6y7z",
-//                    pid = pid,
-//                    title = title,
-//                    body = body,
-//                    qty = qty,
-//                    price = price,
-//                    image = image,
-//                    category = category
-//                )
-//
-//                // Check if response.products is not null and not empty
-//                val productsList = response.products
-//                if (productsList.isNotEmpty()) {
-//                    val index = _products.indexOfFirst { it.pid == pid }
-//                    if (index != -1) {
-//                        _products[index] = productsList.first()
-//                    }
-//                } else {
-//                    errorMessage = "No products returned from the update."
-//                }
-//            } catch (e: Exception) {
-//                errorMessage = e.message.toString()
-//            } finally {
-//                isLoading = false
-//            }
-//        }
-//    }
+    fun updateProduct(product: UpdateProductRequest) {
+        viewModelScope.launch {
+            isLoading = true
+            try {
+                val response = apiService.updateProduct(product = product)
 
-//    fun deleteProduct(pid: Int) {
-//        viewModelScope.launch {
-//            isLoading = true
-//            try {
-//                val response = apiService.deleteProduct(
-//                    apiKey = "d2f8e6d5c9b0a1e2f7d3c4b5a6e7f8g9h0i1j2k3l4m5n6o7p8q9r0s1t2u3v4w5x6y7z",
-//                    pid = pid
-//                )
-//                if (response.products.isEmpty()) {
-//                    _products.removeAll { it.pid == pid }
-//                }
-//            } catch (e: Exception) {
-//                errorMessage = e.message.toString()
-//            } finally {
-//                isLoading = false
-//            }
-//        }
-//    }
+                if (response.message != null) {
+                    fetchProducts()
+                } else {
+                    errorMessage = "Error: ${response.error}"
+                }
+            } catch (e: Exception) {
+                errorMessage = e.message.toString()
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun deleteProduct(pid: String) {
+        viewModelScope.launch {
+            isLoading = true
+            try {
+                val response = apiService.deleteProduct(pid = pid)
+                if (response.message != null) {
+                    fetchProducts()
+                } else {
+                    errorMessage = "Error: ${response.error}"
+                }
+            } catch (e: Exception) {
+                errorMessage = e.message.toString()
+            } finally {
+                isLoading = false
+            }
+        }
+    }
 }

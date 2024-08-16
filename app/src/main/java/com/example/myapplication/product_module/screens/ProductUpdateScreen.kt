@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.product_module.models.UpdateProductRequest
 import com.example.myapplication.product_module.models.Product
 import com.example.myapplication.product_module.viewmodels.ProductViewModel
 
@@ -50,20 +52,18 @@ fun ProductUpdateScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(text = product.title)
-                },
+                title = { Text(text = product.title) },
                 navigationIcon = {
-                    IconButton(onClick = { onBackPressed() }) { // Back button
+                    IconButton(onClick = onBackPressed) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
         }
-    ) {
+    ) { innerPadding ->
         Box(
             modifier = Modifier
-                .padding(it)
+                .padding(innerPadding)
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
@@ -75,61 +75,54 @@ fun ProductUpdateScreen(
             ) {
                 TextField(
                     value = title,
-                    onValueChange = { title = it },
+                    onValueChange = { newValue -> title = newValue },
                     label = { Text("Title") },
                     modifier = Modifier.fillMaxWidth()
                 )
                 TextField(
                     value = body,
-                    onValueChange = { body = it },
+                    onValueChange = { newValue -> body = newValue },
                     label = { Text("Description") },
                     modifier = Modifier.fillMaxWidth()
                 )
                 TextField(
                     value = qty,
-                    onValueChange = { qty = it },
+                    onValueChange = { newValue -> qty = newValue },
                     label = { Text("Quantity") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 TextField(
                     value = price,
-                    onValueChange = { price = it },
+                    onValueChange = { newValue -> price = newValue },
                     label = { Text("Price") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 TextField(
                     value = image,
-                    onValueChange = { image = it },
+                    onValueChange = { newValue -> image = newValue },
                     label = { Text("Image URL") },
                     modifier = Modifier.fillMaxWidth()
                 )
                 TextField(
                     value = category,
-                    onValueChange = { category = it },
+                    onValueChange = { newValue -> category = newValue },
                     label = { Text("Category") },
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-//                Button(onClick = {
-//                    viewModel.updateProduct(
-//                        pid = product.pid,
-//                        title = title,
-//                        body = body,
-//                        qty = qty.toIntOrNull(),
-//                        price = price.toDoubleOrNull(),
-//                        image = image,
-//                        category = category
-//                    )
-//                    if (viewModel.errorMessage.isEmpty()) {
-//                        onProductUpdated()
-//                    }
-//                }) {
-//                    Text("Update Product")
-//                }
+                Button(onClick = {
+                    val productData = UpdateProductRequest(product.pid ,title, body, qty, price, image, category)
+                    viewModel.updateProduct(productData)
+                    if (viewModel.errorMessage.isEmpty()) {
+                        onProductUpdated()
+                    }
+                }) {
+                    Text("Update Product")
+                }
 
                 if (viewModel.isLoading) {
                     CircularProgressIndicator(modifier = Modifier.padding(top = 16.dp))

@@ -2,6 +2,7 @@ package com.example.myapplication.product_module.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,9 +37,10 @@ fun ProductDetailScreen(
     viewModel: ProductViewModel,
     productId: Int,
     onNavigateToUpdate: (Product) -> Unit,
+    onNavigateToDelete: (Product) -> Unit,
     onBackPressed: () -> Unit
 ) {
-    val product = viewModel.products.find { it.pid === productId.toString() }
+    val product = viewModel.products.find { it.pid.toInt() == productId }
 
     Scaffold(
         topBar = {
@@ -89,11 +91,19 @@ fun ProductDetailScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Button(
-                        onClick = { onNavigateToUpdate(product) },
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    ) {
-                        Text("Update Product")
+                    Row {
+                        Button(
+                            onClick = { onNavigateToUpdate(product) },
+                            modifier = Modifier.align(Alignment.CenterVertically).weight(1f)
+                        ) {
+                            Text("Update Product")
+                        }
+                        Button(
+                            onClick = { onNavigateToDelete(product) },
+                            modifier = Modifier.align(Alignment.CenterVertically).weight(1f)
+                        ) {
+                            Text("Delete Product")
+                        }
                     }
                 }
             } else {

@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,7 +43,7 @@ import com.example.myapplication.product_module.models.Product
 import com.example.myapplication.product_module.viewmodels.ProductViewModel
 
 @Preview(showSystemUi = true)
-@Composable()
+@Composable
 fun PreviewProductScreen() {
     ProductScreen(productViewModel = ProductViewModel(), navController = rememberNavController())
 }
@@ -63,14 +64,11 @@ fun ProductScreen(productViewModel: ProductViewModel, navController: NavControll
             TopAppBar(
                 title = { Text(text = "Products") },
                 actions = {
-                    IconButton(onClick = {
-                        // Navigate to the create product screen
-                        navController.navigate("create_product")
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Create Product"
-                        )
+                    IconButton(onClick = { navController.navigate("create_product") }) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = "Create Product")
+                    }
+                    IconButton(onClick = { productViewModel.fetchProducts() }) {
+                        Icon(imageVector = Icons.Default.Refresh, contentDescription = "Refresh")
                     }
                 }
             )
